@@ -6,7 +6,7 @@ import torch
 app = Flask(__name__)
 
 nlp = spacy.load("en_core_web_sm")
-model_path = "./Labtop - AI"
+model_path = "Laptop - AI"
 model = BertForSequenceClassification.from_pretrained(model_path)
 tokenizer = BertTokenizer.from_pretrained(model_path)
 
@@ -42,7 +42,8 @@ def predict_sentiment(sentence, aspect_term):
         outputs = model(**inputs)
         logits = outputs.logits
         probs = torch.nn.functional.softmax(logits, dim=-1)
-        predicted_label_idx = int(torch.argmax(probs, dim=-1).item())
+        predicted_label_idx = torch.argmax(probs, dim=-1).item()
+
     return SENTIMENT_LABELS[predicted_label_idx]
 
 @app.route("/analyze", methods=["POST"])
@@ -62,4 +63,4 @@ def home():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
